@@ -42,7 +42,10 @@ int draw_orbits()
     //length_str = sprintf(factor_str, "%d", factor);
     //XDrawArc(display, main_window, gc, 0, 0, SCALE_FACTOR*2, SCALE_FACTOR*2, 0, 360*64);
     //XDrawString(display, main_window, gc, SCALE_FACTOR*2 - 30, SCALE_FACTOR*2 - 30, factor_str, length_str);
-    for (point = 0.0; point <= numpoints*5.0; point++)
+    XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR-1, SCALE_FACTOR-1, 4, 4, 0, 360*64);
+    XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR, SCALE_FACTOR, 2, 2, 0, 360*64);
+    XDrawPoint(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR+1, SCALE_FACTOR+1);
+    for (point = 0.0; point <= numpoints*32.0; point++)
     {
         earth_theta= 2.0*PI/numpoints * point;
         mars_theta = earth_theta / 2.1354;
@@ -50,12 +53,12 @@ int draw_orbits()
         y_earth = sin(earth_theta);
         x_earth_scaled = x_earth * fraction_earth_mars + SCALE_FACTOR+1;
         y_earth_scaled = -1.0 * y_earth * fraction_earth_mars + SCALE_FACTOR+1;
-        XDrawPoint(display, xwindow, DefaultGC(display,screen), (int)x_earth_scaled, (int)y_earth_scaled);
+        XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_earth_scaled-1, (int)y_earth_scaled-1, 2, 2, 0, 360*64);
         x_mars = cos(mars_theta);
         y_mars = sin(mars_theta);
         x_mars_scaled = x_mars * SCALE_FACTOR + SCALE_FACTOR+1;
         y_mars_scaled = -1.0 * y_mars * SCALE_FACTOR + SCALE_FACTOR+1;
-        XDrawPoint(display, xwindow, DefaultGC(display,screen), (int)x_mars_scaled, (int)y_mars_scaled);
+        XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_mars_scaled-1, (int)y_mars_scaled-1, 2, 2, 0, 360*64);
         XDrawLine(display, xwindow, DefaultGC(display,screen), (int)x_earth_scaled, (int)y_earth_scaled, (int)x_mars_scaled, (int)y_mars_scaled);
         usleep(250000);
         XFlush(display);

@@ -21,6 +21,8 @@ char ICON_NAME[] = __FILE__;
 #define WINDOW_WIDTH (SCALE_FACTOR*2+2)
 #define WINDOW_HEIGHT (SCALE_FACTOR*2+2)
 #define PI 3.1415926536
+#define NUMPOINTS 60
+#define NUMORBITS 15
 
 /*
  * Globals
@@ -35,22 +37,22 @@ unsigned long foreground, background, earthcolor, marscolor, suncolor, linecolor
 int draw_orbits()
 {
     double point;
-    double numpoints = 60.0;
+    double numpoints = (double)NUMPOINTS;
     double earth_theta, mars_theta;
     double x_earth, y_earth;
     double x_mars, y_mars;
     double x_earth_scaled, y_earth_scaled;
     double x_mars_scaled, y_mars_scaled;
     double fraction_earth_mars = 149598023.0 * SCALE_FACTOR / 227939366.0;
-    //length_str = sprintf(factor_str, "%d", factor);
-    //XDrawArc(display, main_window, gc, 0, 0, SCALE_FACTOR*2, SCALE_FACTOR*2, 0, 360*64);
-    //XDrawString(display, main_window, gc, SCALE_FACTOR*2 - 30, SCALE_FACTOR*2 - 30, factor_str, length_str);
-    XSetForeground(display, DefaultGC(display, screen), suncolor);
-    XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR-1, SCALE_FACTOR-1, 4, 4, 0, 360*64);
-    XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR, SCALE_FACTOR, 2, 2, 0, 360*64);
-    XDrawPoint(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR+1, SCALE_FACTOR+1);
-    for (point = 0.0; point <= numpoints*15.0; point++)
+    for (point = 0.0; point <= numpoints*(double)NUMORBITS; point++)
     {
+        if ((int)point % NUMPOINTS == 0)
+        {
+            XSetForeground(display, DefaultGC(display, screen), suncolor);
+            XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR-1, SCALE_FACTOR-1, 4, 4, 0, 360*64);
+            XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR, SCALE_FACTOR, 2, 2, 0, 360*64);
+            XDrawPoint(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR+1, SCALE_FACTOR+1);
+        }
         earth_theta= 2.0*PI/numpoints * point;
         mars_theta = earth_theta / (687.0 / 365.25);
         x_earth = cos(earth_theta);
@@ -67,7 +69,7 @@ int draw_orbits()
         XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_mars_scaled-1, (int)y_mars_scaled-1, 2, 2, 0, 360*64);
         XSetForeground(display, DefaultGC(display, screen), linecolor);
         XDrawLine(display, xwindow, DefaultGC(display,screen), (int)x_earth_scaled, (int)y_earth_scaled, (int)x_mars_scaled, (int)y_mars_scaled);
-        usleep(125000);
+        usleep(50000000/(NUMPOINTS*NUMORBITS));
         XFlush(display);
     }
 

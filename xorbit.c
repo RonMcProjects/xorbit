@@ -30,9 +30,9 @@ char ICON_NAME[] = __FILE__;
 Display *display = NULL;
 Window xwindow;
 int screen;
-XColor RGB_color, hardware_color; /* added for color. */
-Colormap color_map;               /* added for color. */
-unsigned long foreground, background, earthcolor, marscolor, suncolor, linecolor;
+XColor RGB_colour, hardware_colour; /* added for colour. */
+Colormap colour_map;               /* added for colour. */
+unsigned long foreground, background, earthcolour, marscolour, suncolour, linecolour;
 
 int draw_orbits(int erase)
 {
@@ -49,7 +49,7 @@ int draw_orbits(int erase)
     {
         if ((int)point % NUMPOINTS == 0)
         {
-            XSetForeground(display, DefaultGC(display, screen), suncolor);
+            XSetForeground(display, DefaultGC(display, screen), suncolour);
             XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR-1, SCALE_FACTOR-1, 4, 4, 0, 360*64);
             XDrawArc(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR, SCALE_FACTOR, 2, 2, 0, 360*64);
             XDrawPoint(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR+1, SCALE_FACTOR+1);
@@ -72,16 +72,16 @@ int draw_orbits(int erase)
             XSetForeground(display, DefaultGC(display, screen), BlackPixel(display, screen));
             XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_mars_prior-1, (int)y_mars_prior-2, 4, 4, 0, 360*64);
             XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_mars_prior-1, (int)y_mars_prior-1, 2, 2, 0, 360*64);
-            XSetForeground(display, DefaultGC(display, screen), linecolor);
+            XSetForeground(display, DefaultGC(display, screen), linecolour);
             XDrawLine(display, xwindow, DefaultGC(display,screen), (int)x_earth_prior, (int)y_earth_prior, (int)x_mars_prior, (int)y_mars_prior);
         }
-        XSetForeground(display, DefaultGC(display, screen), linecolor);
+        XSetForeground(display, DefaultGC(display, screen), linecolour);
         XDrawLine(display, xwindow, DefaultGC(display,screen), (int)x_earth_scaled, (int)y_earth_scaled, (int)x_mars_scaled, (int)y_mars_scaled);
-        XSetForeground(display, DefaultGC(display, screen), earthcolor);
+        XSetForeground(display, DefaultGC(display, screen), earthcolour);
         XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_earth_scaled-1, (int)y_earth_scaled-2, 4, 4, 0, 360*64);
         XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_earth_scaled-1, (int)y_earth_scaled-1, 2, 2, 0, 360*64);
         XDrawPoint(display, xwindow, DefaultGC(display, screen), (int)x_earth_scaled, (int)y_earth_scaled);
-        XSetForeground(display, DefaultGC(display, screen), marscolor);
+        XSetForeground(display, DefaultGC(display, screen), marscolour);
         XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_mars_scaled-1, (int)y_mars_scaled-2, 4, 4, 0, 360*64);
         XDrawArc(display, xwindow, DefaultGC(display, screen), (int)x_mars_scaled-1, (int)y_mars_scaled-1, 2, 2, 0, 360*64);
         XDrawPoint(display, xwindow, DefaultGC(display, screen), (int)x_mars_scaled, (int)y_mars_scaled);
@@ -115,10 +115,10 @@ void setup_xwindow(int argc, char **argv)
     depth = DefaultDepth(display, screen);
     if (depth > 1)              /* not monochrome */
     {
-        earthcolor = 0x87ceeb;
-        marscolor = 0x9c2e35;
-        linecolor = 0x404040;
-        suncolor = 0xfce570;
+        earthcolour = 0x87ceeb;
+        marscolour = 0x9c2e35;
+        linecolour = 0x404040;
+        suncolour = 0xfce570;
     }
     xwindow = XCreateSimpleWindow(display, RootWindow(display, screen), 10, 10, WINDOW_WIDTH, WINDOW_HEIGHT, 1,
                                    foreground, background);
@@ -150,7 +150,7 @@ char **argv;
         XNextEvent(display, &event);
         if (event.type == Expose)
         {
-            draw_orbits(1);
+            draw_orbits(argc <= 1);
         }
         if ((event.type == KeyPress) || (event.type == ButtonPress))
             break;

@@ -23,6 +23,14 @@ char ICON_NAME[] = __FILE__;
 #define PI 3.1415926536
 #define NUMPOINTS 60
 #define NUMORBITS 15
+#define EARTHBLUE_RGB 0x87ceeb
+#define MARSRED_RGB 0x9c2e35
+#define LINEGREY_RGB 0x404040
+#define SUNYELLOW_RGB 0xfce570
+#define MARSYEAR 687.0
+#define EARTHYEAR 365.25
+#define EARTH_TO_SUN 149598023.0
+#define MARS_TO_SUN 227939366.0
 
 /*
  * Globals
@@ -43,7 +51,7 @@ int draw_orbits(int erase)
     double x_mars, y_mars;
     double x_earth_scaled, y_earth_scaled;
     double x_mars_scaled, y_mars_scaled;
-    double fraction_earth_mars = 149598023.0 * SCALE_FACTOR / 227939366.0;
+    double fraction_earth_mars = EARTH_TO_SUN * SCALE_FACTOR / MARS_TO_SUN;
     double x_earth_prior=5, y_earth_prior=5, x_mars_prior=5, y_mars_prior=5;
     for (point = 0.0; point <= numpoints*(double)NUMORBITS; point++)
     {
@@ -55,7 +63,7 @@ int draw_orbits(int erase)
             XDrawPoint(display, xwindow, DefaultGC(display, screen), SCALE_FACTOR+1, SCALE_FACTOR+1);
         }
         earth_theta= 2.0*PI/numpoints * point;
-        mars_theta = earth_theta / (687.0 / 365.25);
+        mars_theta = earth_theta / (MARSYEAR / EARTHYEAR);
         x_earth = cos(earth_theta);
         y_earth = sin(earth_theta);
         x_earth_scaled = x_earth * fraction_earth_mars + SCALE_FACTOR+1;
@@ -115,10 +123,10 @@ void setup_xwindow(int argc, char **argv)
     depth = DefaultDepth(display, screen);
     if (depth > 1)              /* not monochrome */
     {
-        earthcolour = 0x87ceeb;
-        marscolour = 0x9c2e35;
-        linecolour = 0x404040;
-        suncolour = 0xfce570;
+        earthcolour = EARTHBLUE_RGB;
+        marscolour  = MARSRED_RGB;
+        linecolour  = LINEGREY_RGB;
+        suncolour   = SUNYELLOW_RGB;
     }
     xwindow = XCreateSimpleWindow(display, RootWindow(display, screen), 10, 10, WINDOW_WIDTH, WINDOW_HEIGHT, 1,
                                    foreground, background);
